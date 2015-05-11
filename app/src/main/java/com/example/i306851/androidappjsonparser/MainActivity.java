@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,7 +103,7 @@ public class MainActivity extends ActionBarActivity {
                 JSONObject json = jsonParser.makeHttpRequest(
                         "http://jpfruitshop.net76.net/book1.php", "POST", params);
 
-                Log.d("Hi", "Sourav");
+                Log.d("Hi", "");
                 // json success tag
                 success = json.getInt(TAG_SUCCESS);
 
