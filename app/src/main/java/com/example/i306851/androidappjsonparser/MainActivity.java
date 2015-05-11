@@ -103,7 +103,6 @@ public class MainActivity extends ActionBarActivity {
                 JSONObject json = jsonParser.makeHttpRequest(
                         "http://jpfruitshop.net76.net/book1.php", "POST", params);
 
-                Log.d("Hi", "");
                 // json success tag
                 success = json.getInt(TAG_SUCCESS);
 
