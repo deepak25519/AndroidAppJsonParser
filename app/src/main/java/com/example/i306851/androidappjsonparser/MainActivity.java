@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,10 +37,16 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn = (Button)findViewById(R.id.btn);
+        Button send = (Button) findViewById(R.id.send);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new LoadAllCategoryQues().execute();
+            }
+        });
+        send.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                new SendAllData().execute();
             }
         });
     }
@@ -136,6 +143,55 @@ public class MainActivity extends ActionBarActivity {
             pDialog.dismiss();
 
             Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    class SendAllData extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Loading data... Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        /**
+         * getting All products from url
+         * */
+        protected String doInBackground(String... args) {
+            // Building Parameters
+
+            //int counter = -1;
+
+            try {
+
+                //int count = 0;
+                int id = 25;
+                String name = "Test JSON";
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", id);
+                jsonObject.put("name",name);
+
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("json", jsonObject.toString()));
+                // Log.d("request!", "starting");
+
+                jsonParser.makeHttpResponse("http://jpfruitshop.net76.net/book2.php", params);
+
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+                //Toast.makeText(Subjects.this, e.toString(), 60).show();
+                //tv.setText(e.toString());
+            }
+
+            //===================================================
+
+
+            return null;
         }
 
     }
