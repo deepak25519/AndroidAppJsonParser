@@ -31,13 +31,14 @@ public class MainActivity extends ActionBarActivity {
     int success;
 
     Button btn ;
+    Button send;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn = (Button)findViewById(R.id.btn);
-        Button send = (Button) findViewById(R.id.send);
+        send = (Button) findViewById(R.id.send);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,14 +170,16 @@ public class MainActivity extends ActionBarActivity {
             try {
 
                 //int count = 0;
-                int id = 25;
-                String name = "Test JSON";
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", id);
-                jsonObject.put("name",name);
+                //int id = 25;
+                //String name = "Test JSON";
+                //JSONObject jsonObject = new JSONObject();
+                //jsonObject.put("id", id);
+                //jsonObject.put("name",name);
 
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("json", jsonObject.toString()));
+                //params.add(new BasicNameValuePair("json", jsonObject.toString()));
+                params.add(new BasicNameValuePair("id", "21"));
+                params.add(new BasicNameValuePair("name", "Test Json"));
                 // Log.d("request!", "starting");
 
                 jsonParser.makeHttpResponse("http://jpfruitshop.net76.net/book2.php", params);
@@ -193,6 +196,17 @@ public class MainActivity extends ActionBarActivity {
 
             return null;
         }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after getting all products
+            pDialog.dismiss();
+
+            Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_LONG).show();
+        }
+
 
     }
 }
