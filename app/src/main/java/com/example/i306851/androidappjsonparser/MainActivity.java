@@ -173,8 +173,8 @@ public class MainActivity extends ActionBarActivity {
                 String name = "Test JSON";
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", id);
-                jsonObject.put("name",name);
-
+                jsonObject.put("name", name);
+                Log.d("Jagmeet","Jagmeet");
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("json", jsonObject.toString()));
                 // Log.d("request!", "starting");
