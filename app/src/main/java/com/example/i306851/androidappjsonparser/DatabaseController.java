@@ -23,11 +23,7 @@ public class DatabaseController {
     JSONParser jsonParser = new JSONParser();
 
 
-    private DatabaseController() {
-
-
-
-    }
+    private DatabaseController() {}
 
     public static DatabaseController getInstance() {
         if (dbController != null) {
