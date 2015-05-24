@@ -15,7 +15,9 @@
         android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit"
-        />
+        android:text="Load"
+        android:layout_below="@+id/send"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="73dp" />
 
 </RelativeLayout>
