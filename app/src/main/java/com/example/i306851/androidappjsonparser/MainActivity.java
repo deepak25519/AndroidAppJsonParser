@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -54,6 +55,9 @@ public class MainActivity extends Activity {
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(false);
                 pDialog.show();
+
+
+
                 dbDatabaseController.loadAllData(context, loadDataListener);
             }
         });
@@ -64,7 +68,10 @@ public class MainActivity extends Activity {
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(false);
                 pDialog.show();
-                dbDatabaseController.sendAllData(context, sendDataListener);
+                EditText itemName = (EditText)findViewById(R.id.item_name);
+                TransactionData transactionData = new TransactionData();
+                transactionData.setItmeName(itemName.getText().toString());
+                dbDatabaseController.sendAllData(context,transactionData, sendDataListener);
 
             }
         });

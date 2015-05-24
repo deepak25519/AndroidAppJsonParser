@@ -35,8 +35,8 @@ public class DatabaseController {
     }
 
 
-    public void sendAllData(Context context, SendDataListener sendDataListener) {
-        new SendAllData(sendDataListener).execute();
+    public void sendAllData(Context context,TransactionData transactionData ,SendDataListener sendDataListener) {
+        new SendAllData(transactionData,sendDataListener).execute();
     }
 
     public void loadAllData(Context context, LoadDataListener loadDataListener) {
@@ -103,9 +103,11 @@ public class DatabaseController {
     class SendAllData extends AsyncTask<String, String, String> {
 
         SendDataListener sendDataListener;
+        TransactionData transactionData;
 
-        public SendAllData(SendDataListener sendDataListener) {
+        public SendAllData(TransactionData transactionData,SendDataListener sendDataListener) {
             this.sendDataListener = sendDataListener;
+            this.transactionData = transactionData;
         }
 
         @Override
