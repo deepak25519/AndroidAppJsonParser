@@ -1,8 +1,10 @@
 package com.example.i306851.androidappjsonparser;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+
+import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,35 +22,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
-    JSONParser jsonParser = new JSONParser();
+
+    private ProgressDialog pDialog;
+    String message = "";
+
+    private DatabaseController dbDatabaseController;
+
+    private Context context;
+
     private static final String TAG_NAME = "Name";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private ProgressDialog pDialog;
-    String message = "";
-    int success;
+    private int success;
 
-    Button btn ;
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn = (Button)findViewById(R.id.btn);
+        context = this;
+        btn = (Button) findViewById(R.id.btn);
         Button send = (Button) findViewById(R.id.send);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new LoadAllCategoryQues().execute();
+                pDialog = new ProgressDialog(MainActivity.this);
+                pDialog.setMessage("Loading data... Please wait...");
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(false);
+                pDialog.show();
+                dbDatabaseController.loadAllData(context, loadDataListener);
             }
         });
-        send.setOnClickListener(new View.OnClickListener(){
+        send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new SendAllData().execute();
+                pDialog = new ProgressDialog(MainActivity.this);
+                pDialog.setMessage("Loading data... Please wait...");
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(false);
+                pDialog.show();
+                dbDatabaseController.sendAllData(context, sendDataListener);
+
             }
         });
+        dbDatabaseController = DatabaseController.getInstance();
     }
 
 
@@ -74,126 +94,45 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class LoadAllCategoryQues extends AsyncTask<String, String, String> {
 
-//		int lastViewedPosition;
-//		View v;
-//		int topOffset;
-
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
+    DatabaseController.LoadDataListener loadDataListener = new DatabaseController.LoadDataListener() {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setMessage("Loading data... Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
+        public void loadComplete(JSONObject json) {
 
-        /**
-         * getting All products from url
-         * */
-        protected String doInBackground(String... args) {
-            // Building Parameters
-
-            //int counter = -1;
+            // json success tag
 
             try {
-
-                //int count = 0;
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                //params.add(new BasicNameValuePair("data", "Deepak"));
-                // Log.d("request!", "starting");
-
-                JSONObject json = jsonParser.makeHttpRequest(
-                        "http://jpfruitshop.net76.net/book1.php", "POST", params);
-
-                Log.d("", "Sourav");
-                // json success tag
                 success = json.getInt(TAG_SUCCESS);
-
-                if(success == 1) {
+                if (success == 1) {
                     JSONArray jsonArray = json.getJSONArray("item");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject names = jsonArray.getJSONObject(i);
                         message += " " + names.getString(TAG_NAME);
                     }
                 }
-            }
-            catch(Exception e) {
+
+                pDialog.dismiss();
+
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+            } catch (Exception e) {
                 e.printStackTrace();
                 //Toast.makeText(Subjects.this, e.toString(), 60).show();
                 //tv.setText(e.toString());
             }
-
-            //===================================================
-
-
-            return null;
         }
+    };
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
-        protected void onPostExecute(String file_url) {
-            // dismiss the dialog after getting all products
+    DatabaseController.SendDataListener sendDataListener = new DatabaseController.SendDataListener() {
+        @Override
+        public void sendComplete() {
+
             pDialog.dismiss();
 
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "send complete", Toast.LENGTH_LONG).show();
+
         }
-
-    }
-
-    class SendAllData extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setMessage("Loading data... Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        /**
-         * getting All products from url
-         * */
-        protected String doInBackground(String... args) {
-            // Building Parameters
-
-            //int counter = -1;
-
-            try {
-
-                //int count = 0;
-                int id = 25;
-                String name = "Test JSON";
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", id);
-                jsonObject.put("name",name);
-                Log.d("test","Jagmeet");
-
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("json", jsonObject.toString()));
-                // Log.d("request!", "starting");
-
-                jsonParser.makeHttpResponse("http://jpfruitshop.net76.net/book2.php", params);
-
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-                //Toast.makeText(Subjects.this, e.toString(), 60).show();
-                //tv.setText(e.toString());
-            }
-
-            //===================================================
+    };
 
 
-            return null;
-        }
-
-    }
 }
